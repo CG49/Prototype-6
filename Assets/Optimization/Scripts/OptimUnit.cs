@@ -37,19 +37,8 @@ public class OptimUnit : MonoBehaviour
         Profiler.EndSample();
         Profiler.BeginSample("Rotating");
 
-        var t = transform;
+        RotateUnit();
 
-        if(transform.position.x <= 0)
-            transform.Rotate(currentAngularVelocity * Time.deltaTime, 0, 0);
-        else if(transform.position.x > 0)
-            transform.Rotate(-currentAngularVelocity * Time.deltaTime, 0 ,0);
-        
-        if(transform.position.z >= 0)
-            transform.Rotate(0,0, currentAngularVelocity * Time.deltaTime);
-        else if(transform.position.z < 0)
-            transform.Rotate(0,0, -currentAngularVelocity * Time.deltaTime);
-
-        
         Profiler.EndSample();
         Profiler.BeginSample("Moving");
         
@@ -84,6 +73,22 @@ public class OptimUnit : MonoBehaviour
         Profiler.EndSample();
     }
 
+    private void RotateUnit()
+    {
+        Transform tr = transform;
+        Vector3 position = tr.position;
+
+        float directionX = position.x <= 0f ? 1f : -1f;
+        float directionZ = position.z >= 0f ? 1f : -1f;
+
+        float amount = currentAngularVelocity * Time.deltaTime;
+
+        tr.Rotate(
+            amount * directionX,
+            0f,
+            amount * directionZ
+        );
+    }
 
     private void PickNewVelocity()
     {
